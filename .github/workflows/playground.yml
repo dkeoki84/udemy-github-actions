@@ -31,21 +31,20 @@ jobs:
   set_env:
     runs-on: ubuntu-latest
     outputs:
-      build_env: ${{ steps.set_variable.outputs.build_env }}
-      build_secret: ${{ steps.set_variable.outputs.build_secret }}
+      env: $GITHUB_ENV
     steps:
       - name: Initiate new env
         id: set_variable
         run: |
           if [ ${{ github.ref }} == "release/prd/deploy_all" ]; then
-            echo "::set-output name=build_env::prd"
-            echo "::set-output name=build_secret::prd_secret"
+            echo "JOB_BUILD_ENV=prd" >> $GITHUB_ENV
+            echo "JOB_BUILD_SECRET=${{ secrets.PRD_BUILD_SECRET }}" >> $GITHUB_ENV
           elif [ ${{ github.ref }} == "release/stg/deploy_all" ]; then
-            echo "::set-output name=build_env::stg"
-            echo "::set-output name=build_secret::stg_secret"
+            echo "JOB_BUILD_ENV=stg" >> $GITHUB_ENV
+            echo "JOB_BUILD_SECRET=${{ secrets.STG_BUILD_SECRET }}" >> $GITHUB_ENV
           else
-            echo "::set-output name=build_env::dev"
-            echo "::set-output name=build_secret::dev_secret"
+            echo "JOB_BUILD_ENV=dev" >> $GITHUB_ENV
+            echo "JOB_BUILD_SECRET=${{ secrets.DEV_BUILD_SECRET }}" >> $GITHUB_ENV
           fi
 
   run-shell-command:
@@ -56,15 +55,19 @@ jobs:
         run: |
           echo command1: ${BUILD_ENV}
           echo command1: ${BUILD_SECRET}
-          echo "-----------------------"
-          echo "job env1: ${{ needs.set_env.outputs.build_env }}"
-          echo "job env1: ${{ needs.set_env.outputs.build_secret }}"
+          echo "------------------------"
+          echo command1: ${{env.JOB_BUILD_ENV}}
+          echo command1: ${{env.JOB_BUILD_SECRET}}
+          echo "------------------------"
+          echo command1: ${{needs.set_env.outputs.env.JOB_BUILD_ENV}}
+          echo command1: ${{needs.set_env.outputs.env.JOB_BUILD_SECRET}}
       - name: checkout phase
         uses: actions/checkout@v3
       - name: check files
         run: |
           ls -la
-          cat ./${{ needs.set_env.outputs.build_secret }}.txt
+          echo ${{ env.JOB_BUILD_ENV }}
+          cat ${{ env.JOB_BUILD_SECRET }}
   
   run-shell-command-2:
     needs: [set_env]
@@ -74,8 +77,5 @@ jobs:
         run: |
           echo command2: ${BUILD_ENV}
           echo command2: ${BUILD_SECRET}
-          echo "-----------------------"
-          echo "job env2: ${{ needs.set_env.outputs.build_env }}"
-          echo "job env2: ${{ needs.set_env.outputs.build_secret }}"
 
 
