@@ -1,11 +1,13 @@
 name: Shell commands
 
 on:
-  # pull_request:
-  #   types: [closed]
-  #   branches:
-  #     - master
-  push:
+  pull_request:
+    types: [closed]
+    branches:
+      - release/dev/deploy_all
+      - release/stg/deploy_all
+      - release/prd/deploy_all
+  # push:
 
 env:
   BUILD_ENV: |
@@ -26,18 +28,48 @@ env:
     }}
 
 jobs:
+  set_env:
+    runs-on: ubuntu-latest
+    outputs:
+      build_env: ${{ steps.set_variable.outputs.build_env }}
+      build_secret: ${{ steps.set_variable.outputs.build_secret }}
+    steps:
+      - name: Initiate env
+        id: set_variable
+        run: |
+          if [ ${{ github.ref }} == "release/prd/deploy_all" ]; then
+            echo "::set-output name=build_env::prd"
+            echo "::set-output name=build_secret::${{ secrets.PRD_BUILD_SECRET }}"
+          elif [ ${{ github.ref }} == "release/stg/deploy_all" ]; then
+            echo "::set-output name=build_env::stg"
+            echo "::set-output name=build_secret::${{ secrets.STG_BUILD_SECRET }}"
+          else
+            echo "::set-output name=build_env::dev"
+            echo "::set-output name=build_secret::${{ secrets.DEV_BUILD_SECRET }}"
+          fi
+
   run-shell-command:
+    needs: [set_env]
     runs-on: ubuntu-latest
     steps:
       - name: echo Envs
         run: |
           echo command1: ${BUILD_ENV}
           echo command1: ${BUILD_SECRET}
+          echo "-----------------------"
+          echo "job env1: ${{ needs.set_env.outputs.build_env }}"
+          echo "job env1: ${{ needs.set_env.outputs.build_secret }}"
   
   run-shell-command-2:
+    needs: [set_env]
     runs-on: ubuntu-latest
     steps:
       - name: echo Envs
         run: |
           echo command2: ${BUILD_ENV}
           echo command2: ${BUILD_SECRET}
+          echo "-----------------------"
+          echo "job env2: ${{ needs.set_env.outputs.build_env }}"
+          echo "job env2: ${{ needs.set_env.outputs.build_secret }}"
+
+
