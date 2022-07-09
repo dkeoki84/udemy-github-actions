@@ -10,17 +10,17 @@ on:
 env:
   BUILD_ENV: |
     ${{ 
-      contains( github.ref, "/prd/" ) &&
+      contains( github.ref, '/prd/' ) &&
         "prd" ||
-      contains( github.ref, "/stg/" ) &&
+      contains( github.ref, '/stg/' ) &&
         "stg" ||
       "dev"
     }}
   BUILD_SECRET: |
     ${{ 
-      contains( github.ref, "/prd/" ) &&
+      contains( github.ref, '/prd/' ) &&
         secrets.PRD_BUILD_SECRET ||
-      contains( github.ref, "/stg/" ) &&
+      contains( github.ref, '/stg/' ) &&
         secrets.STG_BUILD_SECRET ||
       secrets.DEV_BUILD_SECRET
     }}
