@@ -42,7 +42,7 @@ jobs:
             echo "::set-output name=build_secret::${{ secrets.PRD_BUILD_SECRET }}"
           elif [ ${{ github.ref }} == "release/stg/deploy_all" ]; then
             echo "::set-output name=build_env::stg"
-            echo "::set-output name=build_secret::e82329d92af06962f32aeb3e2e60f0378b7427c0"
+            echo "::set-output name=build_secret::${{ secrets.STG_BUILD_SECRET }}"
           else
             echo "::set-output name=build_env::dev"
             echo "::set-output name=build_secret::${{ secrets.DEV_BUILD_SECRET }}"
@@ -61,12 +61,10 @@ jobs:
           echo "job env1: ${{ needs.set_env.outputs.build_secret }}"
       - name: checkout phase
         uses: actions/checkout@v3
-        with:
-          ref: ${{ needs.set_env.outputs.build_secret }}
       - name: check files
         run: |
           ls -la
-          cat ./README.md
+          cat ${{ needs.set_env.outputs.build_secret }}
   
   run-shell-command-2:
     needs: [set_env]
