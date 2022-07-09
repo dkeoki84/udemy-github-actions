@@ -39,13 +39,13 @@ jobs:
         run: |
           if [ ${{ github.ref }} == "release/prd/deploy_all" ]; then
             echo "::set-output name=build_env::prd"
-            echo "::set-output name=build_secret::${{ secrets.PRD_BUILD_SECRET }}"
+            echo "::set-output name=build_secret::prd_secret"
           elif [ ${{ github.ref }} == "release/stg/deploy_all" ]; then
             echo "::set-output name=build_env::stg"
-            echo "::set-output name=build_secret::${{ secrets.STG_BUILD_SECRET }}"
+            echo "::set-output name=build_secret::stg_secret"
           else
             echo "::set-output name=build_env::dev"
-            echo "::set-output name=build_secret::${{ secrets.DEV_BUILD_SECRET }}"
+            echo "::set-output name=build_secret::dev_secret"
           fi
 
   run-shell-command:
@@ -64,7 +64,7 @@ jobs:
       - name: check files
         run: |
           ls -la
-          cat ${{ needs.set_env.outputs.build_secret }}
+          cat ./${{ needs.set_env.outputs.build_secret }}.txt
   
   run-shell-command-2:
     needs: [set_env]
