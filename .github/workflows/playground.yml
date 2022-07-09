@@ -1,20 +1,43 @@
 name: Shell commands
 
-on: [push]
+on:
+  # pull_request:
+  #   types: [closed]
+  #   branches:
+  #     - master
+  push:
+
+env:
+  BUILD_ENV: |
+    ${{ 
+      contains( github.ref, "/prd/" ) &&
+        "prd" ||
+      contains( github.ref, "/stg/" ) &&
+        "stg" ||
+      "dev"
+    }}
+  BUILD_SECRET: |
+    ${{ 
+      contains( github.ref, "/prd/" ) &&
+        secrets.PRD_BUILD_SECRET ||
+      contains( github.ref, "/stg/" ) &&
+        secrets.STG_BUILD_SECRET ||
+      secrets.DEV_BUILD_SECRET
+    }}
 
 jobs:
   run-shell-command:
     runs-on: ubuntu-latest
     steps:
-      - name: echo a string
-        run: echo "Hello World"
-      - name: multiline script
+      - name: echo Envs
         run: |
-          node -v
-          npm -v
-      - name: python command
+          echo command1: ${BUILD_ENV}
+          echo command1: ${BUILD_SECRET}
+  
+  run-shell-command-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo Envs
         run: |
-          import platform
-          print( platform.processor())
-        shell: python
-
+          echo command2: ${BUILD_ENV}
+          echo command2: ${BUILD_SECRET}
