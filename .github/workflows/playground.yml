@@ -11,10 +11,10 @@ env:
   BUILD_ENV: |
     ${{ 
       contains( github.ref, '/prd/' ) &&
-        "prd" ||
+        'prd' ||
       contains( github.ref, '/stg/' ) &&
-        "stg" ||
-      "dev"
+        'stg' ||
+      'dev'
     }}
   BUILD_SECRET: |
     ${{ 
