@@ -34,7 +34,7 @@ jobs:
       build_env: ${{ steps.set_variable.outputs.build_env }}
       build_secret: ${{ steps.set_variable.outputs.build_secret }}
     steps:
-      - name: Initiate env
+      - name: Initiate new env
         id: set_variable
         run: |
           if [ ${{ github.ref }} == "release/prd/deploy_all" ]; then
