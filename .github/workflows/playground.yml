@@ -53,12 +53,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cached Build
-        if: $CACHED_BUILD == true
+        if: env.CACHED_BUILD == true
         run: |
           echo "Using Cached Build"
 
       - name: Normal Build
-        if: $CACHED_BUILD != true
+        if: env.CACHED_BUILD != true
         run: |
           echo "Using Normal Build"
 
