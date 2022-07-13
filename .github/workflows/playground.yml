@@ -10,7 +10,7 @@ on:
   # push:
 
 env:
-  CACHED_BUILD: true
+  CACHED_BUILD: "true"
   BUILD_ENV: |
     ${{ 
       contains( github.ref, '/prd/' ) &&
