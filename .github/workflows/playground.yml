@@ -60,7 +60,7 @@ jobs:
           echo "cached_build=${{ env.CACHED_BUILD }}"
           echo "Using Cached Build"
         env:
-          TEST_ENV: ${{ env.BUILD_ENV }}:test-env
+          TEST_ENV: ${{ format('{0}:test-env', env.BUILD_ENV) }}
 
       - name: Normal Build
         if: env.CACHED_BUILD != 'true'
