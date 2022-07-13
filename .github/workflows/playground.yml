@@ -51,7 +51,7 @@ jobs:
     needs: [set_env]
     runs-on: ubuntu-latest
     steps:
-      - name: echo Envs
+      - name: echo ${BUILD_ENV} Envs
         run: |
           echo command1: ${BUILD_ENV}
           echo command1: ${BUILD_SECRET}
@@ -61,9 +61,9 @@ jobs:
           echo "------------------------"
           echo command1: ${{needs.set_env.outputs.env.JOB_BUILD_ENV}}
           echo command1: ${{needs.set_env.outputs.env.JOB_BUILD_SECRET}}
-      - name: checkout phase
+      - name: ${BUILD_ENV} checkout phase
         uses: actions/checkout@v3
-      - name: check files
+      - name: ${BUILD_ENV} check files
         run: |
           ls -la
           echo ${{ env.JOB_BUILD_ENV }}
