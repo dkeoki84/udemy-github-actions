@@ -11,7 +11,7 @@ on:
 
 env:
   CACHED_BUILD: true
-  BUILD_ENV: |
+  BUILD_ENV: >-
     ${{ 
       contains( github.ref, '/prd/' ) &&
         'prd' ||
@@ -19,7 +19,7 @@ env:
         'stg' ||
       'dev'
     }}
-  BUILD_SECRET: |
+  BUILD_SECRET: >-
     ${{ 
       contains( github.ref, '/prd/' ) &&
         secrets.PRD_BUILD_SECRET ||
