@@ -10,7 +10,7 @@ on:
   # push:
 
 env:
-  CACHED_BUILD: "true"
+  CACHED_BUILD: true
   BUILD_ENV: |
     ${{ 
       contains( github.ref, '/prd/' ) &&
@@ -53,14 +53,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cached Build
-        if: env.CACHED_BUILD == "true"
+        if: env.CACHED_BUILD
         run: |
           echo "cached_build=${CACHED_BUILD}"
           echo "cached_build=${{ env.CACHED_BUILD }}"
           echo "Using Cached Build"
 
       - name: Normal Build
-        if: env.CACHED_BUILD != "true"
+        if: !env.CACHED_BUILD
         run: |
           echo "cached_build=${CACHED_BUILD}"
           echo "cached_build=${{ env.CACHED_BUILD }}"
