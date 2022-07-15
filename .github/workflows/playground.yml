@@ -11,7 +11,7 @@ on:
 
 env:
   CACHED_BUILD: true
-  BUILD_ENV: >
+  BUILD_ENV: >-
     ${{ 
       contains( github.ref, '/prd/' ) &&
         'prd' ||
@@ -19,7 +19,7 @@ env:
         'stg' ||
       'dev'
     }}
-  BUILD_SECRET: >
+  BUILD_SECRET: >-
     ${{ 
       contains( github.ref, '/prd/' ) &&
         secrets.PRD_BUILD_SECRET ||
@@ -103,3 +103,12 @@ jobs:
       - name: New Task 1
         run: |
           echo "Add new actions to check if github actions work on another branch"
+
+  run-shell-command-4:
+    needs: [set_env]
+    runs-on: ubuntu-latest
+    steps:
+      - name: New Task 2
+        run: |
+          echo "Add new actions to check again if github actions work on another branch"
+
