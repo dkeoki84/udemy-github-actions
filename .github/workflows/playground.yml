@@ -96,4 +96,10 @@ jobs:
           echo command2: ${BUILD_ENV}
           echo command2: ${BUILD_SECRET}
 
-
+  run-shell-command-3:
+    needs: [set_env]
+    runs-on: ubuntu-latest
+    steps:
+      - name: New Task 1
+        run: |
+          echo "Add new actions to check if github actions work on another branch"
